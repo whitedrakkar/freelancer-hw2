@@ -11,28 +11,16 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-/**
- *
- * @author jim
- */
 public class CMSC325Animate extends JPanel {
 
     // A counter that increases by one in each frame.
     private int frameNumber;
-    // The time, in milliseconds, since the animation started.
-    private long elapsedTimeMillis;
-    // This is the measure of a pixel in the coordinate system
-    // set up by calling the applyLimits method.  It can be used
-    // for setting line widths, for example.
-    private float pixelSize;
 
     private Transformation transformation;
 
@@ -61,7 +49,7 @@ public class CMSC325Animate extends JPanel {
                 (screen.width - window.getWidth()) / 2,
                 (screen.height - window.getHeight()) / 2);
         Timer animationTimer;  // A Timer that will emit events to drive the animation.
-        final long startTime = System.currentTimeMillis();
+
         // Taken from AnimationStarter
         // Modified to change timing and allow for recycling
         animationTimer = new Timer(1600, (ActionEvent arg) -> {
@@ -70,7 +58,7 @@ public class CMSC325Animate extends JPanel {
             } else {
                 panel.frameNumber++;
             }
-            panel.elapsedTimeMillis = System.currentTimeMillis() - startTime;
+
             panel.repaint();
         });
         window.setVisible(true); // Open the window, making it visible on the screen.
