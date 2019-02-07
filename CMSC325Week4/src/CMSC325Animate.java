@@ -37,10 +37,10 @@ public class CMSC325Animate extends JPanel {
     private Transformation transformation;
 
     private final ImageTemplate letter = ImageCreator.createImage("letter", Color.RED, Color.BLACK, 0, 0);
-    private final ImageTemplate rectangle = ImageCreator.createImage("rectangle", Color.BLACK, Color.YELLOW, 20, 20);
-    private final ImageTemplate circle = ImageCreator.createImage("circle", Color.YELLOW, Color.BLUE, 20, 40);
-    private final ImageTemplate number = ImageCreator.createImage("number", Color.PINK, Color.LIGHT_GRAY, 40, 20);
-    private final ImageTemplate cross = ImageCreator.createImage("cross", Color.GREEN, Color.ORANGE, 20, -20);
+    private final ImageTemplate rectangle = ImageCreator.createImage("rectangle", Color.BLACK, Color.YELLOW, 60, 60);
+    private final ImageTemplate circle = ImageCreator.createImage("circle", Color.YELLOW, Color.BLUE, 60, 120);
+    private final ImageTemplate number = ImageCreator.createImage("number", Color.PINK, Color.LIGHT_GRAY, 120, 60);
+    private final ImageTemplate cross = ImageCreator.createImage("cross", Color.GREEN, Color.ORANGE, 60, -60);
 
     private boolean firstDraw = true;
 
@@ -105,31 +105,37 @@ public class CMSC325Animate extends JPanel {
 
         // Controls your zoom and area you are looking at
         //applyWindowToViewportTransformation(g2, -75, 75, -75, 75, true);
-        System.out.println("Frame is " + frameNumber);
+        System.out.print("Frame is " + frameNumber);
         switch (frameNumber) {
             case 0:
                 transformation = new Transformation();
+                System.out.println(". Do nothing.");
                 break;
 
             case 1:
                 transformation = new Transformation(-12, 12, 1, 1, 0);
+                System.out.println(". Translate (-12,12).");
                 break;
 
             case 2:
                 transformation = new Transformation(0, 0, 1, 1, 55 * Math.PI / 180.0);
+                System.out.println(". Rotate (55) counter-clockwise.");
                 break;
 
             case 3:
                 transformation = new Transformation(0, 0, 1, 1, -75 * Math.PI / 180.0);
+                System.out.println(". Rotate (75) clockwise.");
                 break;
 
             case 4:
                 transformation = new Transformation(0, 0, 3, 1.5, 0);
+                System.out.println(". Scale up (3,1.5).");
                 break;
 
             case 5:
                 // added to not make things escalate so quickly
                 transformation = new Transformation(0, 0, 0.5, 1, 0);
+                System.out.println(". Scale down (0.5,1).");
                 break;
 
             default:
@@ -139,37 +145,45 @@ public class CMSC325Animate extends JPanel {
         if (firstDraw) {
 
             g2.translate(400, 300); // Set image into position.
+            AffineTransform originalTransform = (AffineTransform) g2.getTransform().clone();
 
-            drawImage(g2, rectangle);
-            drawImage(g2, circle);
-            drawImage(g2, letter);
-            //initImage(g2, number);
-            //initImage(g2, cross);
+            drawFirstImage(g2, rectangle, originalTransform);
+            drawFirstImage(g2, circle, originalTransform);
+            drawFirstImage(g2, letter, originalTransform);
+            drawFirstImage(g2, number, originalTransform);
+            drawFirstImage(g2, cross, originalTransform);
+
             firstDraw = false;
 
-            letter.setTransform(g2.getTransform());
         } else {
-
-            AffineTransform transform = letter.getTransform();
-            g2.setTransform(transform);
-
-            g2.translate(transformation.getTranslateX(), transformation.getTranslateY()); // Move image.
-            g2.rotate(transformation.getRotation()); // Rotate image.
-            g2.scale(transformation.getScaleX(), transformation.getScaleY()); // Scale image.
 
             drawImage(g2, rectangle);
             drawImage(g2, circle);
             drawImage(g2, letter);
-            //drawImage(g2, number);
-            //drawImage(g2, cross);
+            drawImage(g2, number);
+            drawImage(g2, cross);
 
-            letter.setTransform(g2.getTransform());
         }
     }
 
-    private void drawImage(Graphics2D g2, ImageTemplate imageTemplate) {
-        g2.translate(imageTemplate.getOriginalX(), imageTemplate.getOriginalY()); // offset image.
+    private void drawFirstImage(Graphics2D g2, ImageTemplate imageTemplate, AffineTransform originalTransform) {
+
+        g2.setTransform(originalTransform); // revert to original transform
+        g2.translate(imageTemplate.getOriginalX(), imageTemplate.getOriginalY()); // Set image into position.
         g2.drawImage(imageTemplate.getImage(), 0, 0, this); // Draw image.
-        g2.translate(-imageTemplate.getOriginalX(), -imageTemplate.getOriginalY()); // offset image.
+        imageTemplate.setTransform((AffineTransform) g2.getTransform().clone()); // remember last transform for this iage.
+    }
+
+    private void drawImage(Graphics2D g2, ImageTemplate imageTemplate) {
+        AffineTransform transform = imageTemplate.getTransform();
+        g2.setTransform(transform);
+
+        g2.translate(transformation.getTranslateX(), transformation.getTranslateY()); // Move image.
+        g2.rotate(transformation.getRotation()); // Rotate image.
+        g2.scale(transformation.getScaleX(), transformation.getScaleY()); // Scale image.
+
+        g2.drawImage(imageTemplate.getImage(), 0, 0, this); // Draw image.
+
+        imageTemplate.setTransform((AffineTransform) g2.getTransform().clone());
     }
 }
