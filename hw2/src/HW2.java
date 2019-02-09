@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class CMSC325Animate extends JPanel {
+public class HW2 extends JPanel {
 
     // A counter that increases by one in each frame.
     private int frameNumber;
@@ -39,7 +39,7 @@ public class CMSC325Animate extends JPanel {
         // TODO code application logic here
         JFrame window;
         window = new JFrame("Java Animation");  // The parameter shows in the window title bar.
-        final CMSC325Animate panel = new CMSC325Animate(); // The drawing area.
+        final HW2 panel = new HW2(); // The drawing area.
         window.setContentPane(panel); // Show the panel in the window.
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // End program when window closes.
         window.pack();  // Set window size based on the preferred sizes of its contents.
@@ -65,7 +65,7 @@ public class CMSC325Animate extends JPanel {
         animationTimer.start();  // Start the animation running.
     }
 
-    public CMSC325Animate() {
+    public HW2() {
         // Size of Frame
         setPreferredSize(new Dimension(800, 600));
     }

@@ -11,8 +11,7 @@ public abstract class ImageTemplate {
     private int originalX;
     private int originalY;
 
-    public ImageTemplate() {
-    }
+    public ImageTemplate() {}
 
     public ImageTemplate(Color color1, Color color2, int originalX, int originalY) {
         this.color1 = color1;
